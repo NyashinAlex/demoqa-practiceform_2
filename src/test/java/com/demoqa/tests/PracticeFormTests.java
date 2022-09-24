@@ -11,33 +11,14 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
 public class PracticeFormTests {
-
     PracticeFormPage practiceFormPage = new PracticeFormPage();
-
     @BeforeAll
     static void setUp() {
         Configuration.baseUrl = "https://demoqa.com";
         Configuration.browserSize = "1920x1080";
     }
-
     @Test
     void fillPracticeForm() {
-
-        //Тестовые данные
-        String firstName = "Alex";
-        String lastName = "Nyashin";
-        String userEmail = "nyashin@test.com";
-        String gender = "Male";
-        String mobile = "8905478547";
-        String month = "July";
-        String year = "1996";
-        String day = "07";
-        String subjects = "Maths";
-        String hobbies = "Sports";
-        String img = "test_cat_qa.jpg";
-        String address = "Moscow";
-        String state = "NCR";
-        String city = "Delhi";
 
         practiceFormPage.openPage()
                 .setFirstName("Alex")
@@ -45,54 +26,43 @@ public class PracticeFormTests {
                 .setUserEmail("nyashin@test.com")
                 .setGender("Male")
                 .setUserNumber("8905478547")
-                .setBirthDate("1996","July","07");
+                .setBirthDate("1996","July","07")
+                .setSubjects("Maths")
+                .setHobbies("Sports")
+                .uploadPicture("user.jpg")
+                .setCurrentAddress("Moscow")
+                .setState("NCR")
+                .setCity("Delhi")
+                .clickSubmitButton();
 
-        $("#subjectsContainer").$("[autocapitalize=none]").setValue(subjects).pressEnter();
-        $("#hobbiesWrapper").$(byText(hobbies)).click();
-        //$("#uploadPicture").uploadFile(new File("src/test/resources/test_cat_qa.jpg"));// это второй вариант, чтобы не забыть
-        $("#uploadPicture").uploadFromClasspath(img);
-        $("#currentAddress").setValue(address);
-        $("#state").$("[autocapitalize=none]").setValue(state).pressEnter();
-        $("#city").$("[autocapitalize=none]").setValue(city).pressEnter();
-        $("#submit").click();
+        practiceFormPage.checkVisible()
+                .checkTableElement("Student Name","Alex Nyashin")
+                .checkTableElement("Student Email","nyashin@test.com")
+                .checkTableElement("Gender", "Male")
+                .checkTableElement("Mobile", "8905478547")
+                .checkTableElement("Date of Birth", "07 July,1996")
+                .checkTableElement("Subjects", "Maths")
+                .checkTableElement("Hobbies", "Sports")
+                .checkTableElement("Picture", "user.jpg")
+                .checkTableElement("Address", "Moscow")
+                .checkTableElement("State and City", "NCR Delhi");
 
-        $(".table-responsive").shouldBe(visible);
-        $(".table-responsive").shouldHave(text(firstName + " " + lastName),
-                text(userEmail),
-                text(gender),
-                text(mobile),
-                text(day + " " + month + "," + year),
-                text(subjects),
-                text(hobbies),
-                text(img),
-                text(address),
-                text(state + " " + city));
     }
     @Test
     void fillMinPracticeForm() {
-
-        //Тестовые данные
-        String firstName = "Alex";
-        String lastName = "Nyashin";
-        String gender = "Male";
-        String mobile = "8905478547";
-        String month = "July";
-        String year = "1996";
-        String day = "07";
 
         practiceFormPage.openPage()
                 .setFirstName("Alex")
                 .setLastName("Nyashin")
                 .setGender("Male")
                 .setUserNumber("8905478547")
-                .setBirthDate("1996","July","07");
+                .setBirthDate("1996","July","07")
+                .clickSubmitButton();
 
-        $("#submit").click();
-
-        $(".table-responsive").shouldBe(visible);
-        $(".table-responsive").shouldHave(text(firstName + " " + lastName),
-                text(gender),
-                text(mobile),
-                text(day + " " + month + "," + year));
+        practiceFormPage.checkVisible()
+                .checkTableElement("Student Name","Alex Nyashin")
+                .checkTableElement("Gender", "Male")
+                .checkTableElement("Mobile", "8905478547")
+                .checkTableElement("Date of Birth", "07 July,1996");
     }
 }
