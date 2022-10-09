@@ -1,7 +1,10 @@
 package com.demoqa.tests;
 
 import com.codeborne.selenide.Configuration;
+import com.demoqa.helper.Attach;
 import com.demoqa.pages.PracticeFormPage;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -64,5 +67,13 @@ public class PracticeFormTests {
                 .checkTableElement("Gender", "Male")
                 .checkTableElement("Mobile", "8905478547")
                 .checkTableElement("Date of Birth", "07 July,1996");
+    }
+
+    @AfterEach
+    void addAttachments() {
+        Attach.screenshotAs("Last screenshot");
+        Attach.pageSource();
+        Attach.browserConsoleLogs();
+        Attach.addVideo();
     }
 }
